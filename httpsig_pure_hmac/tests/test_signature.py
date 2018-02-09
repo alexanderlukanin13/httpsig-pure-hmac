@@ -6,8 +6,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import json
 import unittest
 
-import httpsig.sign as sign
-from httpsig.utils import parse_authorization_header
+import httpsig_pure_hmac.sign as sign
+from httpsig_pure_hmac.utils import parse_authorization_header
 
 
 sign.DEFAULT_SIGN_ALGORITHM = "hmac-sha256"
