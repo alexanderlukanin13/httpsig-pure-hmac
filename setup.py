@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-# versioneer config
-import versioneer
-versioneer.versionfile_source = 'httpsig_pure_hmac/_version.py'
-versioneer.versionfile_build = 'httpsig_pure_hmac/_version.py'
-versioneer.tag_prefix = 'v'                 # tags are like v1.2.0
-versioneer.parentdir_prefix = 'httpsig-pure-hmac-'    # dirname like 'myproject-1.2.0'
-
 # create long description
 with open('README.rst') as file:
     long_description = file.read()
@@ -16,8 +9,7 @@ with open('CHANGELOG.rst') as file:
 
 setup(
     name='httpsig-pure-hmac',
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
+    version='1.1.2',
     description="Fork of httpsig. HMAC only, no RSA, no PyCrypto, pure Python.",
     long_description=long_description,
     classifiers=[
