@@ -10,7 +10,7 @@ import httpsig.sign as sign
 from httpsig.utils import parse_authorization_header
 
 
-sign.DEFAULT_SIGN_ALGORITHM = "rsa-sha256"
+sign.DEFAULT_SIGN_ALGORITHM = "hmac-sha256"
 
 
 class TestSign(unittest.TestCase):
@@ -35,8 +35,8 @@ class TestSign(unittest.TestCase):
         self.assertIn('algorithm', params)
         self.assertIn('signature', params)
         self.assertEqual(params['keyId'], 'Test')
-        self.assertEqual(params['algorithm'], 'rsa-sha256')
-        self.assertEqual(params['signature'], 'ATp0r26dbMIxOopqw0OfABDT7CKMIoENumuruOtarj8n/97Q3htHFYpH8yOSQk3Z5zh8UxUym6FYTb5+A0Nz3NRsXJibnYi7brE/4tx5But9kkFGzG+xpUmimN4c3TMN7OFH//+r8hBf7BT9/GmHDUVZT2JzWGLZES2xDOUuMtA=')
+        self.assertEqual(params['algorithm'], 'hmac-sha256')
+        self.assertEqual(params['signature'], 'Zj9ZJaHQopGrzWHdjc2L4JH+Ou+iHp1Fwbbc+ZsnS80=')
 
     def test_all(self):
         hs = sign.HeaderSigner(key_id='Test', secret=self.key, headers=[
@@ -65,6 +65,6 @@ class TestSign(unittest.TestCase):
         self.assertIn('algorithm', params)
         self.assertIn('signature', params)
         self.assertEqual(params['keyId'], 'Test')
-        self.assertEqual(params['algorithm'], 'rsa-sha256')
+        self.assertEqual(params['algorithm'], 'hmac-sha256')
         self.assertEqual(params['headers'], '(request-target) host date content-type content-md5 content-length')
-        self.assertEqual(params['signature'], 'G8/Uh6BBDaqldRi3VfFfklHSFoq8CMt5NUZiepq0q66e+fS3Up3BmXn0NbUnr3L1WgAAZGplifRAJqp2LgeZ5gXNk6UX9zV3hw5BERLWscWXlwX/dvHQES27lGRCvyFv3djHP6Plfd5mhPWRkmjnvqeOOSS0lZJYFYHJz994s6w=')
+        self.assertEqual(params['signature'], '1IwnX2DSCGoVihjKcl7f6EZUIcDMPwJAzWPBwgSM830=')

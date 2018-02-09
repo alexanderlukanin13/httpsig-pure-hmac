@@ -3,9 +3,6 @@ Module to assist in verifying a signed header.
 """
 import six
 
-from Crypto.Hash import HMAC
-from Crypto.PublicKey import RSA
-from Crypto.Signature import PKCS1_v1_5
 from base64 import b64decode
 
 from .sign import Signer
@@ -28,12 +25,7 @@ class Verifier(Signer):
         if isinstance(data, six.string_types): data = data.encode("ascii")
         if isinstance(signature, six.string_types): signature = signature.encode("ascii")
         
-        if self.sign_algorithm == 'rsa':
-            h = self._hash.new()
-            h.update(data)
-            return self._rsa.verify(h, b64decode(signature))
-        
-        elif self.sign_algorithm == 'hmac':
+        if self.sign_algorithm == 'hmac':
             h = self._sign_hmac(data)
             s = b64decode(signature)
             return ct_bytes_compare(h, s)

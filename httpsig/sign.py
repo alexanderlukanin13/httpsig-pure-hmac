@@ -1,9 +1,7 @@
 import base64
 import six
 
-from Crypto.Hash import HMAC
-from Crypto.PublicKey import RSA
-from Crypto.Signature import PKCS1_v1_5
+from hmac import HMAC
 
 from .utils import *
 
@@ -25,30 +23,17 @@ class Signer(object):
         assert algorithm in ALGORITHMS, "Unknown algorithm"
         if isinstance(secret, six.string_types): secret = secret.encode("ascii")
         
-        self._rsa = None
         self._hash = None
         self.sign_algorithm, self.hash_algorithm = algorithm.split('-')
         
-        if self.sign_algorithm == 'rsa':
-            try:
-                rsa_key = RSA.importKey(secret)
-                self._rsa = PKCS1_v1_5.new(rsa_key)
-                self._hash = HASHES[self.hash_algorithm]
-            except ValueError:
-                raise HttpSigException("Invalid key.")
-            
-        elif self.sign_algorithm == 'hmac':
-            self._hash = HMAC.new(secret, digestmod=HASHES[self.hash_algorithm])
+        if self.sign_algorithm == 'hmac':
+             self._hash = HMAC(secret, digestmod=HASHES[self.hash_algorithm])
+        else:
+            raise NotImplementedError('Only hmac is supported')
 
     @property
     def algorithm(self):
         return '%s-%s' % (self.sign_algorithm, self.hash_algorithm)
-
-    def _sign_rsa(self, data):
-        if isinstance(data, six.string_types): data = data.encode("ascii")
-        h = self._hash.new()
-        h.update(data)
-        return self._rsa.sign(h)
 
     def _sign_hmac(self, data):
         if isinstance(data, six.string_types): data = data.encode("ascii")
@@ -59,9 +44,7 @@ class Signer(object):
     def _sign(self, data):
         if isinstance(data, six.string_types): data = data.encode("ascii")
         signed = None
-        if self._rsa:
-            signed = self._sign_rsa(data)
-        elif self._hash:
+        if self._hash:
             signed = self._sign_hmac(data)
         if not signed:
             raise SystemError('No valid encryptor found.')
